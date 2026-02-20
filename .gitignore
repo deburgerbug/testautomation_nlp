@@ -1,0 +1,4 @@
+/.ACTIOPNITEMS.txt
+act-cache/
+node_modules/
+.env

@@ -1,0 +1,32 @@
+{
+  "name": "basicstage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.28.1",
+  "devDependencies": {
+    "@types/node": "^25.1.0",
+    "@types/prompt-sync": "^4.2.3",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^3.0.23",
+    "@browserbasehq/stagehand": "^3.0.8",
+    "@openrouter/ai-sdk-provider": "^1.2.8",
+    "ai": "^5.0.126",
+    "dotenv": "^17.2.3",
+    "openai": "^6.17.0",
+    "playwright-core": "^1.58.1",
+    "prompt-sync": "^4.2.0",
+    "stagehand": "^1.0.1",
+    "tsx": "^4.21.0",
+    "zod": "^4.3.6"
+  }
+}

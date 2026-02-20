@@ -1,0 +1,10 @@
+models to try:
+ministral-3:14b
+
+qwen2.5-coder:7b 
+
+qwen2.5-coder:14b
+
+huggingface.co/bartowski/microsoft_Fara-7B-GGUF
+-------------------------------------------------
+only ministral3 works reliably so far

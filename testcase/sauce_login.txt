@@ -1,0 +1,4 @@
+url:https://www.saucedemo.com;
+enter standard_user in username field;
+enter secret_sauce in password field;
+click on login button;
