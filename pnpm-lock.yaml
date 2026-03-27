@@ -20,12 +20,15 @@ importers:
       ai:
         specifier: ^5.0.126
         version: 5.0.126(zod@4.3.6)
+      ai-sdk-ollama:
+        specifier: 2.1.0
+        version: 2.1.0(ai@5.0.126(zod@4.3.6))(zod@4.3.6)
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
       openai:
-        specifier: ^6.17.0
-        version: 6.17.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6)
+        specifier: ^6.32.0
+        version: 6.32.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6)
       playwright-core:
         specifier: ^1.58.1
         version: 1.58.1
@@ -477,6 +480,12 @@ packages:
   agentkeepalive@4.6.0:
     resolution: {integrity: sha512-kja8j7PjmncONqaTsB8fQ+wE2mSU2DJ9D4XKoJ5PFWIdRMa6SLSN1ff4mOr4jCbfRSsxR4keIiySJU0N9T5hIQ==}
     engines: {node: '>= 8.0.0'}
+
+  ai-sdk-ollama@2.1.0:
+    resolution: {integrity: sha512-VRTT34zt6GG09IxdiO0aqOM6wBMgKj+oUQH2E+28XtPrHL2AV+L87UhU1VnGFfo+eXLMcZKJre5NWM9HMA5L5A==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      ai: ^5.0.115
 
   ai@5.0.126:
     resolution: {integrity: sha512-eXR9ZuyojCGLf1JNj3iwyrABTEjX9pJd/SQ0OOLzcotrXoTjQ/2CJ5JwcUbRu0jzWlKCsXDH4kv57D1jOAQR8w==}
@@ -1202,6 +1211,9 @@ packages:
     peerDependencies:
       zod: ^4.0.16
 
+  ollama@0.6.3:
+    resolution: {integrity: sha512-KEWEhIqE5wtfzEIZbDCLH51VFZ6Z3ZSa6sIOg/E/tBV8S51flyqBOXi+bRxlOYKDf8i327zG9eSTb8IJxvm3Zg==}
+
   on-exit-leak-free@2.1.2:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
     engines: {node: '>=14.0.0'}
@@ -1225,8 +1237,8 @@ packages:
       zod:
         optional: true
 
-  openai@6.17.0:
-    resolution: {integrity: sha512-NHRpPEUPzAvFOAFs9+9pC6+HCw/iWsYsKCMPXH5Kw7BpMxqd8g/A07/1o7Gx2TWtCnzevVRyKMRFqyiHyAlqcA==}
+  openai@6.32.0:
+    resolution: {integrity: sha512-j3k+BjydAf8yQlcOI7WUQMQTbbF5GEIMAE2iZYCOzwwB3S2pCheaWYp+XZRNAch4jWVc52PMDGRRjutao3lLCg==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
@@ -1611,6 +1623,9 @@ packages:
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
+  whatwg-fetch@3.6.20:
+    resolution: {integrity: sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==}
+
   whatwg-url@5.0.0:
     resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
 
@@ -1865,7 +1880,7 @@ snapshots:
       '@ai-sdk/perplexity': 2.0.23(zod@4.3.6)
       '@ai-sdk/togetherai': 1.0.34(zod@4.3.6)
       '@ai-sdk/xai': 2.0.56(zod@4.3.6)
-      '@langchain/core': 0.3.80(@opentelemetry/api@1.9.0)(openai@6.17.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6))
+      '@langchain/core': 0.3.80(@opentelemetry/api@1.9.0)(openai@6.32.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6))
       bufferutil: 4.1.0
       chrome-launcher: 1.2.1
       ollama-ai-provider-v2: 1.5.5(zod@4.3.6)
@@ -1991,14 +2006,14 @@ snapshots:
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
-  '@langchain/core@0.3.80(@opentelemetry/api@1.9.0)(openai@6.17.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6))':
+  '@langchain/core@0.3.80(@opentelemetry/api@1.9.0)(openai@6.32.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6))':
     dependencies:
       '@cfworker/json-schema': 4.1.1
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.21
-      langsmith: 0.3.87(@opentelemetry/api@1.9.0)(openai@6.17.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6))
+      langsmith: 0.3.87(@opentelemetry/api@1.9.0)(openai@6.32.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6))
       mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
@@ -2013,7 +2028,7 @@ snapshots:
 
   '@langchain/openai@0.4.9(@langchain/core@0.3.80(@opentelemetry/api@1.9.0)(openai@4.104.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6)))(ws@8.19.0(bufferutil@4.1.0))':
     dependencies:
-      '@langchain/core': 0.3.80(@opentelemetry/api@1.9.0)(openai@6.17.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6))
+      '@langchain/core': 0.3.80(@opentelemetry/api@1.9.0)(openai@6.32.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6))
       js-tiktoken: 1.0.21
       openai: 4.104.0(ws@8.19.0(bufferutil@4.1.0))(zod@3.25.76)
       zod: 3.25.76
@@ -2148,6 +2163,15 @@ snapshots:
   agentkeepalive@4.6.0:
     dependencies:
       humanize-ms: 1.2.1
+
+  ai-sdk-ollama@2.1.0(ai@5.0.126(zod@4.3.6))(zod@4.3.6):
+    dependencies:
+      '@ai-sdk/provider': 2.0.1
+      '@ai-sdk/provider-utils': 3.0.20(zod@4.3.6)
+      ai: 5.0.126(zod@4.3.6)
+      ollama: 0.6.3
+    transitivePeerDependencies:
+      - zod
 
   ai@5.0.126(zod@4.3.6):
     dependencies:
@@ -2817,7 +2841,7 @@ snapshots:
       jwa: 2.0.1
       safe-buffer: 5.2.1
 
-  langsmith@0.3.87(@opentelemetry/api@1.9.0)(openai@6.17.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6)):
+  langsmith@0.3.87(@opentelemetry/api@1.9.0)(openai@6.32.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6)):
     dependencies:
       '@types/uuid': 10.0.0
       chalk: 4.1.2
@@ -2827,7 +2851,7 @@ snapshots:
       uuid: 10.0.0
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
-      openai: 6.17.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6)
+      openai: 6.32.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6)
 
   lighthouse-logger@2.0.2:
     dependencies:
@@ -2911,6 +2935,10 @@ snapshots:
       zod: 4.3.6
     optional: true
 
+  ollama@0.6.3:
+    dependencies:
+      whatwg-fetch: 3.6.20
+
   on-exit-leak-free@2.1.2: {}
 
   on-finished@2.4.1:
@@ -2951,7 +2979,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  openai@6.17.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6):
+  openai@6.32.0(ws@8.19.0(bufferutil@4.1.0))(zod@4.3.6):
     optionalDependencies:
       ws: 8.19.0(bufferutil@4.1.0)
       zod: 4.3.6
@@ -3419,6 +3447,8 @@ snapshots:
   web-streams-polyfill@4.0.0-beta.3: {}
 
   webidl-conversions@3.0.1: {}
+
+  whatwg-fetch@3.6.20: {}
 
   whatwg-url@5.0.0:
     dependencies:

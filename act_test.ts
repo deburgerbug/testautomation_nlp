@@ -1,29 +1,34 @@
 import { Stagehand, type ModelConfiguration } from "@browserbasehq/stagehand";
 //import { createOpenrouterStagehand } from "./stagehand-openrouter-client.js";
 //const stagehand = createOpenrouterStagehand({modelName:"upstage/solar-pro-3:free",experimental:true, verbose:2,cacheDir:'act-cache' }); 
-                   
-
+import { createNgllamaStagehand } from "./stagehand-ngllama-client.js";              
+const stagehand = createNgllamaStagehand({modelName:'ministral-3:14b'}); // hf.co/gabriellarson/Qwen3-4B-Instruct-2507-GGUF:F16, ministral-3:14b
+/*
 const stagehand = new Stagehand({
   env:'LOCAL',
-  model:'ollama/ministral-3:3b',//'ollama/ministral-3:3b', //ollama/hf.co/LiquidAI/LFM2.5-1.2B-Instruct-GGUF:BF16'
+  model:'ollama/ministral-3:3b', //ollama/hf.co/LiquidAI/LFM2.5-1.2B-Instruct-GGUF:BF16'
   experimental:true,
-  verbose:2,
+  verbose:0,
   cacheDir:'act-cache'
 });
+*/
+
 
 
 await stagehand.init();
 const page = await stagehand.context.awaitActivePage();
 console.log(`Stagehand Session Started`);
 
-await page.goto('https://practicetestautomation.com/practice-test-login/');
+await page.goto('https://www.w3schools.com');
 
 /*const agent = await stagehand.agent();
 const agentResult = await agent.execute("enter standard_user in username field");
 console.log(`Agent result:\n`, agentResult); */
 //await stagehand.act('go to https://practicetestautomation.com/practice-test-login/');
-await stagehand.act('enter student in username field');
-await stagehand.act('enter Password123 in password field');
-await stagehand.act('click on login button');
+//await stagehand.act('go to w3schools.com');
+await stagehand.act('click on jquery');
+await stagehand.act('enter p in the text box that is in the exercise section');
+await stagehand.act('click on submit answer');
+//await stagehand.act('click on login button');
 
-await stagehand.close();
+//await stagehand.close();

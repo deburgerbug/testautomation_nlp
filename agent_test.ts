@@ -1,8 +1,12 @@
 import { Stagehand, type ModelConfiguration } from "@browserbasehq/stagehand";
 //import { createOpenrouterStagehand } from "./stagehand-openrouter-client.js";
 //const stagehand = createOpenrouterStagehand({modelName:"upstage/solar-pro-3:free",experimental:true, verbose:2,cacheDir:'act-cache' }); 
-                   
 
+
+import { createNgllamaStagehand } from "./stagehand-ngllama-client.js";              
+  
+
+/*
 const stagehand = new Stagehand({
   env:'LOCAL',
   model:'ollama/phi4-mini',//'ollama/ministral-3:3b', //ollama/hf.co/LiquidAI/LFM2.5-1.2B-Instruct-GGUF:BF16'
@@ -11,7 +15,9 @@ const stagehand = new Stagehand({
   cacheDir:'act-cache'
 });
 
+*/
 
+const stagehand = createNgllamaStagehand({modelName:'lfm2:24b'});
 await stagehand.init();
 const page = await stagehand.context.awaitActivePage();
 console.log(`Stagehand Session Started`);
