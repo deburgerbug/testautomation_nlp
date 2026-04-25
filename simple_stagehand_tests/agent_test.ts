@@ -3,7 +3,7 @@ import { Stagehand, type ModelConfiguration } from "@browserbasehq/stagehand";
 //const stagehand = createOpenrouterStagehand({modelName:"upstage/solar-pro-3:free",experimental:true, verbose:2,cacheDir:'act-cache' }); 
 
 
-import { createNgllamaStagehand } from "./stagehand-ngllama-client.js";              
+import { createNgllamaStagehand } from "../stagehand-ngllama-client.js";              
   
 
 /*

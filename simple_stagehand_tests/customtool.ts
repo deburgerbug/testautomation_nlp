@@ -2,12 +2,12 @@ import promptSync from "prompt-sync";
 import { tool } from "ai";
 import { z } from "zod/v3";
 
-import { createOpenrouterStagehand } from "./stagehand-openrouter-client.js";
+import { createOpenrouterStagehand } from "../stagehand-openrouter-client.js";
 import { Stagehand } from "@browserbasehq/stagehand";
 
 //const stagehand = createOpenrouterStagehand({modelName:"google/gemma-3-27b-it:free",experimental:true, verbose:2}); 
 
-import { createNgllamaStagehand } from "./stagehand-openaicompatible.js";                  
+import { createNgllamaStagehand } from "../stagehand-ngllama-client.js";                  
 const stagehand = createNgllamaStagehand({modelName:'ministral-3:14b', experimental:true});
 
 /*

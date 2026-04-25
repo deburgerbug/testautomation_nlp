@@ -1,13 +1,15 @@
 import { Stagehand } from "@browserbasehq/stagehand";
 import fs from "fs";
+import { createNgllamaStagehand } from "./stagehand-ngllama-client.js";              
+const stagehand = createNgllamaStagehand({modelName:'ministral-3:14b'}); // hf.co/gabriellarson/Qwen3-4B-Instruct-2507-GGUF:F16, ministral-3:14b
 
-const stagehand = new Stagehand({
+/* const stagehand = new Stagehand({
   env: 'LOCAL',
   model: 'ollama/ministral-3:3b',
   experimental: true,
   verbose: 0,
   cacheDir: 'act-cache'
-}); 
+}); */
 
 await stagehand.init();
 const page = await stagehand.context.awaitActivePage();
@@ -54,4 +56,4 @@ for (const command of commands) {
   }
 }
 
-await stagehand.close();
+//await stagehand.close();

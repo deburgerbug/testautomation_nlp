@@ -1,0 +1,5 @@
+url:https://www.youtube.com;
+click on the three dots in the top right, it should display a new menu with 'Help', 'Send Feedback';
+click on appearance in the menu, it should show you a new menu with new options: dark theme, purple theme and so on;
+click on light theme;
+yeah wait;

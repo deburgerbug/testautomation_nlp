@@ -12,6 +12,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.28.1",
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@types/node": "^25.1.0",
     "@types/prompt-sync": "^4.2.3",
     "typescript": "^5.9.3"

@@ -1,0 +1,4 @@
+url:https://www.youtube.com;
+click on the guide button to expand a menu on the side of the page;
+click on show more under the explore section, to reveal the 'Events', 'Gaming', 'Fashion & Beauty' option in the list;
+click on the 'Events' link, the url should change to the playables page;

@@ -1,4 +1,4 @@
-import { createOpenrouterStagehand } from "./stagehand-openrouter-client.js";
+import { createOpenrouterStagehand } from "../stagehand-openrouter-client.js";
 import { chromium } from "playwright-core";
 
 

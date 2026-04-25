@@ -1,0 +1,3 @@
+{"instruction":"click on guide button","element":null}
+{"instruction":"click on movies","element":{"target":{"tag":"TP-YT-PAPER-ITEM","selector":"a.yt-simple-endpoint.style-scope > tp-yt-paper-item.style-scope","text":"Movies","attributes":{"role":"link"}}}}
+{"instruction":"click on this arrow","element":{"target":{"tag":"YT-TOUCH-FEEDBACK-SHAPE","selector":"button > yt-touch-feedback-shape","text":"","attributes":{}}}}
