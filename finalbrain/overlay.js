@@ -360,13 +360,20 @@ const refreshFiles = async () => {
     
     row.querySelector('.del-btn').onclick = async () => {
       confirmMsg.textContent = `Delete ${f}?`;
-      backState = stateInitial; // If we say No, go back to the list/initial view
       
+      backState = 'initial'; 
+
+      // 2. Define the confirm logic specifically for this file
       onConfirm = async () => {
+        console.log(`Deleting file: ${f}`);
         await window.removeFile(f);
+        if (typeof refreshFiles === 'function') await refreshFiles();
       };
 
-      await window.pushState(mainInput.value, rawViewer.value, 'confirm');
+      // 3. PASS 4 ARGUMENTS: View must be 'confirm', Action must be 'delete'
+      const textVal = shadow.getElementById('main-input').value;
+      const jsonVal = shadow.getElementById('raw-data-viewer').value;
+      await window.pushState(textVal, jsonVal, 'confirm', 'delete');
     };
     fileList.appendChild(row);
   });
@@ -410,6 +417,7 @@ window.addEventListener('sync-ui', (e) => {
   const mInput = shadow.getElementById('main-input');
   const rViewer = shadow.getElementById('raw-data-viewer');
 
+
   // 1. Sync text (don't overwrite if the user is currently typing in this tab)
   if (shadow.activeElement !== mInput) {
     mInput.value = data.text || '';
@@ -425,16 +433,22 @@ window.addEventListener('sync-ui', (e) => {
       //await window.saveStepToFile(data.text); // Ensure this function exists in finalbrain.ts
     };
   } else if (data.action === 'delete') {
-  // IF THIS PART NEVER RUNS, CHECK THE LOGS FOR data.action
-  confirmMsg.textContent = "Confirm DELETE text?";
-    onConfirm = async () => {
+
+    const isFileDelete = confirmMsg.textContent.startsWith("Delete");
+    
+    if (!isFileDelete) {
+      confirmMsg.textContent = "Confirm DELETE text?";
+      onConfirm = async () => {
       console.log("DEBUG: Executing Delete...");
       // Clear the inputs locally
-      shadow.getElementById('main-input').value = '';
-      shadow.getElementById('raw-data-viewer').value = '';
+      mInput.value = '';
+      rViewer.value = '';
       // Tell the bridge to clear the central state
       await window.pushState('', '', 'initial', null);
     };
+
+    }
+  
   }
   // 2. Sync visibility (Single source of truth)
   stateInitial.classList.toggle('hidden', data.view !== 'initial');

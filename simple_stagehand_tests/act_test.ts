@@ -18,7 +18,7 @@ const stagehand = new Stagehand({
 await stagehand.init();
 const page = await stagehand.context.awaitActivePage();
 console.log(`Stagehand Session Started`);
-await page.goto('https://youtube.com');
+await page.goto('https://the-internet.herokuapp.com/infinite_scroll');
 /* 
 const [action] = await stagehand.observe(`return elements that closely match this metadata: {"url":"https://www.w3schools.com/","target":{"tag":"H2","text":"React","html":"<h2 ">React</h2>"},"domPath":["HTML","BODY","DIV","DIV","DIV","DIV","DIV","DIV","DIV","DIV","A","DIV","H2"]}
 `);
@@ -28,7 +28,7 @@ if (action) {
   console.log(actresult.message)
 }
   */
-await stagehand.act(`click on guide button`);
+await stagehand.act(`hover on user1 `);
   /* 
 await page.goto('https://www.w3schools.com');
 await stagehand.act('click on jquery');

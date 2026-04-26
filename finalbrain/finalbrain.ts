@@ -285,8 +285,8 @@ await context.exposeFunction('pushState', async (text: string, json: string, vie
       const prompt = rawJson ? `Intent: ${instruction} | Context: ${rawJson}` : instruction;
 
       
-      const [action] = await stagehand.observe("UNRELATED HIGH LEVEL COMMAND:Dont say click(), say click in your response. command:" + prompt);
-      
+      const actions = await stagehand.observe("UNRELATED HIGH LEVEL COMMAND:Dont say click(), say click in your response. command:" + prompt);
+      const action = actions[0];
       currentAction = action; // Store it globally in this file for the Execute step
       console.log(`[AI] Observation complete. Element found: ${!!action}`);
       

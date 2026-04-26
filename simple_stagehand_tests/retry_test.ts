@@ -22,7 +22,7 @@ rl.on('SIGINT', () => {
 });
 
 //const stagehand = createOpenrouterStagehand({modelName:'nvidia/nemotron-nano-12b-v2-vl:free'}); 
-const stagehand = createNgllamaStagehand({modelName:'ministral-3:14b', cacheDir:'act/test'});
+const stagehand = createNgllamaStagehand({modelName:'ministral-3:14b', cacheDir:'act/test', verbose:0});
 
 await stagehand.init();
 
@@ -36,97 +36,132 @@ const browser = await chromium.connectOverCDP(stagehand.connectURL());
 
 await pwPage?.goto("https://www.youtube.com");
 
-const instruction = 'click on guide button in the  navbar'
 
-while (true) {
-  if (abortController.signal.aborted) break;
+async function startSession() {
+  while (true) { // Master Session Loop
+    const instruction = await ask("\n[NEW TASK] What should I do next? (or type 'exit'): ");
+    if (instruction.toLowerCase() === 'exit') break;
 
-  try {
-    console.log(`[AI] Observing: ${instruction}...`);
-    const [action] = await stagehand.observe(`try finding: ${instruction}`);
+    // Fix: Re-create controller so 'Stop' works for every new instruction
+    let currentAbortController = new AbortController();
 
-    if (action) {
-    if (action?.selector) {
-        await pwPage.evaluate((sel) => {
-          // 1. Cleanup: Remove highlight from any previous elements
-          document.querySelectorAll('[data-ai-found]').forEach(el => {
-            (el as HTMLElement).style.outline = '';
-            el.removeAttribute('data-ai-found');
-          });
+    while (true) { // Observation/Act Loop
+      if (currentAbortController.signal.aborted) break;
 
-          // 2. XPath Format Fix: Remove 'xpath=' prefix if Stagehand added it
-          const cleanSelector = sel.startsWith('xpath=') ? sel.replace('xpath=', '') : sel;
+      try {
+        console.log(`[AI] Observing: ${instruction}...`);
+        const [action] = await stagehand.observe(`try finding: ${instruction}`);
 
-          // 3. Robust Finder: Try CSS first, then XPath
-          let el: HTMLElement | null = null;
-          try {
-            el = document.querySelector(cleanSelector);
-          } catch (e) {
-            // If querySelector fails (likely an XPath), use evaluate
-            const result = document.evaluate(cleanSelector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-            el = result.singleNodeValue as HTMLElement;
-          }
-
-          if (el) {
-            // 4. Apply Neon Highlight
-            el.style.setProperty('outline', '5px solid #00ff00', 'important');
-            el.style.outlineOffset = '-5px';
-            el.setAttribute('data-ai-found', 'true'); // Mark it for cleanup later
+        if (!action) {
+            console.log('Not found yet.');
+            const retryChoice = await ask("AI can't find it. (r = Retry, n = New Instruction, s = Stop): ");
             
-            // 5. Scroll but don't get stuck under the Overlay
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }, action.selector);
-      }
-      console.log(`[AI] Highlighted selector: ${action.selector}`);
-
-      const answer = await ask("Satisfied? (y = Yes, n = No, s = Stop): ");
-      if (answer.toLowerCase() === 's') break;
-      if (answer.toLowerCase() === 'n') continue;
-
-      // --- ACT RETRY LOOP ---
-      let actionSuccessful = false;
-      while (!actionSuccessful) {
-        try {
-          console.log("[AI] Executing Action...");
-          await stagehand.act(`${instruction}, use selector: ${action.selector}`);
-          actionSuccessful = true; // If it reaches here, it succeeded
-        } catch (actError) {
-          console.error(`[!] Action Failed: ${getMsg(actError)}`);
-          
-          const retryChoice = await ask("Action failed. (r = Retry Act, o = Re-Observe, s = Stop): ");
-          
-          if (retryChoice.toLowerCase() === 's') {
-            abortController.abort();
-            break; 
-          }
-          if (retryChoice.toLowerCase() === 'o') {
-            // This breaks the INNER loop but stays in the OUTER loop to re-observe
-            break; 
-          }
-          // If 'r', the while(!actionSuccessful) loop runs again
-          console.log("Retrying the action...");
+            if (retryChoice.toLowerCase() === 'n') {
+                break; // Breaks the observation loop to ask for a [NEW TASK]
+            }
+            if (retryChoice.toLowerCase() === 's') {
+                process.exit(); 
+            }
+        // If 'r', it just continues the loop naturally
+        continue; 
         }
-      }
 
-      if (actionSuccessful) {
-        console.log("Success! Step complete.");
+        if (action?.selector) {
+            await pwPage.evaluate((sel) => {
+            // 1. Cleanup: Remove highlight from any previous elements
+            document.querySelectorAll('[data-ai-found]').forEach(el => {
+                (el as HTMLElement).style.outline = '';
+                el.removeAttribute('data-ai-found');
+            });
+
+            // 2. XPath Format Fix: Remove 'xpath=' prefix if Stagehand added it
+            const cleanSelector = sel.startsWith('xpath=') ? sel.replace('xpath=', '') : sel;
+
+            // 3. Robust Finder: Try CSS first, then XPath
+            let el: HTMLElement | null = null;
+            try {
+                el = document.querySelector(cleanSelector);
+            } catch (e) {
+                // If querySelector fails (likely an XPath), use evaluate
+                const result = document.evaluate(cleanSelector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+                el = result.singleNodeValue as HTMLElement;
+            }
+
+            if (el) {
+                // 4. Apply Neon Highlight
+                el.style.setProperty('outline', '5px solid #00ff00', 'important');
+                el.style.outlineOffset = '-5px';
+                el.setAttribute('data-ai-found', 'true'); // Mark it for cleanup later
+                
+                // 5. Scroll but don't get stuck under the Overlay
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            }, action.selector);
+        }
+        
+        console.log(`[AI] Highlighted selector: ${action.selector}`);
+
+        const answer = await ask("Satisfied? (y = Yes, n = No, s = Stop): ");
+        if (answer.toLowerCase() === 's') return; 
+        if (answer.toLowerCase() === 'n') continue; 
+
+        // --- ACT RETRY LOOP ---
+        let actionSuccessful = false;
+        let shouldReObserve = false;
+
+        while (!actionSuccessful && !shouldReObserve) {
+          try {
+            console.log("[AI] Executing Action...");
+            const actResult = await stagehand.act(`${instruction}, use selector: ${action.selector}`);
+
+            if (actResult && actResult.success === false) {
+                console.log(`[!] AI reported a problem: ${actResult.message}`);
+                // We jump to the catch block manually
+                throw new Error(actResult.message || "AI failed to perform the specific method.");
+            }
+
+            actionSuccessful = true; 
+          } catch (actError) {
+            console.error(`[!] Action Failed: ${getMsg(actError)}`);
+            const retryChoice = await ask("Action failed. (r = Retry, o = Re-Observe, s = Stop): ");
+            
+            if (retryChoice.toLowerCase() === 's') {
+              currentAbortController.abort();
+              break; 
+            }
+            if (retryChoice.toLowerCase() === 'o') {
+              shouldReObserve = true; // Flag to exit inner loop and restart observation
+              break; 
+            }
+            console.log("Retrying the action...");
+          }
+        }
+       
+        if (actionSuccessful) {
+          console.log("Success! Task complete.");
+
+        await pwPage.evaluate(() => {
+            document.querySelectorAll('[data-ai-found]').forEach(el => {
+            (el as HTMLElement).style.outline = '';
+            });
+        }).catch(() => {});
+
+          break; // Exit Observation loop -> Back to Master Loop for new instruction
+        }
+        
+        if (shouldReObserve) continue; // Restarts the Observation loop
+        if (currentAbortController.signal.aborted) break; // Exits to Master Loop
+
+      } catch (error) {
+        console.error('Observation error:', getMsg(error));
         break; 
       }
-      
-      // If we broke out of the inner loop via 'o' (Re-Observe), 
-      // we check if we should continue the outer loop
-      if (abortController.signal.aborted) break;
-      continue; 
-
-    } else {
-      console.log('Not found yet, retrying...');
-      await new Promise(r => setTimeout(r, 1000));
     }
-  } catch (error) {
-    console.error('Observation error:', getMsg(error));
-    break; 
   }
+
+  rl.close();
+  console.log("Session Ended.");
 }
 
+await startSession();
 console.log('Success! Moving on...');
