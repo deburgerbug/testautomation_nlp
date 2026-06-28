@@ -99,13 +99,13 @@ Natural Language
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-username>/<repository-name>.git
+git clone https://github.com/srcismailq/testautomation_nlp.git
 ```
 
 Move into the project directory:
 
 ```bash
-cd <repository-name>
+cd testautomation_nlp
 ```
 
 Install the dependencies:
